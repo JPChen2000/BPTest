@@ -68,19 +68,33 @@ void Matrix::normalization()
 {
     for(auto &row:mat)
     {
-        row.assign(col,1.0f);
+        row.assign(col,0.0f);
     }
 }
 
 void Matrix::clear()
 {
-    for(size_t i=0;i<mat[0].size();i++)
+    for(size_t i=0;i<mat.size();i++)
     {
-        for(size_t j=0;j<mat.size();j++)
+        for(size_t j=0;j<mat[0].size();j++)
         {
            mat[i][j] = 0;
         }
     }
+}
+
+Matrix Matrix::sum_axis_0()
+{
+    Matrix tmp(1, col);
+    tmp.clear();
+    for (int i = 0; i < tmp.mat[0].size(); i++)
+    {
+        for (int j = 1; j < mat.size(); j++)
+        {
+            tmp.mat[0][i] += mat[j][i];
+        }
+    }
+    return tmp;
 }
 
 double Matrix::sum()
@@ -113,9 +127,11 @@ double Matrix::mean()
 
 Matrix Matrix::zeros_like()
 {
-    Matrix ret = *this;
+    Matrix ret(mat.size(), mat[0].size());
+    ret.mat = mat;
     ret.clear();
     return ret;
+   //return *this;
 }
 
 Matrix Matrix::rotate()
@@ -156,6 +172,21 @@ Matrix Matrix::fabs()
     return *this;
 }
 
+Matrix Matrix::save_by_zero()
+{
+    Matrix tmp = *this;
+    for(size_t i=0;i<mat.size();i++)
+    {
+        for(size_t j=0;j<mat[0].size();j++)
+        {
+            tmp.mat[i][j] = tmp.mat[i][j] > 0 ? tmp.mat[i][j] : 0;
+        }
+    }
+    return tmp;
+
+}
+
+
 Matrix &Matrix::operator = (const Matrix & M)
 {
     mat = M.mat;
@@ -188,7 +219,7 @@ Matrix &Matrix::operator - ( const Matrix &M)
     return *this;
 }
 
-Matrix & Matrix::operator+=(const Matrix &M)
+Matrix &Matrix::operator+=(const Matrix &M)
 {
     *this = *this + M;
     return *this;
@@ -255,7 +286,7 @@ int Matrix::rows()
 
 void Matrix::printSize()
 {
-    std::cout<<row<<"x"<<col<<std::endl;
+    std::cout<<row<<"x"<<col;
 }
 
 void Matrix::print()

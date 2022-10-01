@@ -16,7 +16,7 @@ public:
     ~Matrix(){
 
     }
-
+    
     void init();
     void print();
     void printSize();
@@ -25,6 +25,7 @@ public:
     int cols();
     double sum();
     double mean();
+    Matrix sum_axis_0();
     Matrix activation(double (*func)(double));
     Matrix derivation(double (*func)(double));
     void normalization();
@@ -32,7 +33,8 @@ public:
     Matrix Square(double x);
     Matrix fabs();
     Matrix zeros_like();
-
+    Matrix save_by_zero();
+    
     Matrix &operator = (const Matrix & M);
     Matrix &operator + (const Matrix & M);
     Matrix &operator - (const Matrix & M);

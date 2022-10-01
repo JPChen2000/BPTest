@@ -1,6 +1,6 @@
 #ifndef NETWORK_H
 #define NETWORK_H
-#include"utils./matrix.h"
+#include"utils/matrix.h"
 using namespace utils;
 namespace rcsc {
 
