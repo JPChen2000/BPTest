@@ -48,7 +48,7 @@ int main()
         x.clear();
         std::vector<std::vector<double>> y;
         y.push_back(std::vector<double>());
-        y[0].push_back(a * a + 0.01 * utils::randNum());
+        y[0].push_back(a * a );
         train_y.push_back(Matrix(y));
         y.clear();
     }
@@ -72,32 +72,35 @@ int main()
 //
     Sequential Seq;
 
-    Seq.add(new Linear("Linear1", 1, 16));
-    Seq.add(new ReLU("RELU1"));
-    Seq.add(new Linear("Linear2", 16, 64));
-    Seq.add(new ReLU("RELU2"));
-    Seq.add(new Linear("Linear3", 64, 1));
-    Seq.print();
-    SGD opt(Seq.params,Seq.grads,Seq.veloc,0.00001);
+    Seq.add(new Linear("Linear1", 1, 2));
+    Seq.add(new Sigmod("Sigmod1"));
+   // Seq.add(new ReLU("RELU1"));
+    Seq.add(new Linear("Linear2", 2, 4));
+    Seq.add(new Sigmod("Sigmod2"));
+   // Seq.add(new ReLU("RELU2"));
+    Seq.add(new Linear("Linear3", 4, 1));
+    //Seq.print();
+    SGD *opt = new SGD(Seq.params,Seq.grads,Seq.veloc,0.001);
     MSE mse("mean");
     
 
-    for (int epoch = 0; epoch < 10; epoch++)
+    for (int epoch = 0; epoch < 1; epoch++)
     {
-        for(int i = 0; i < 200; i++)
+        for(int i = 0; i < 5; i++)
         {
             Matrix pred = Seq.forward(train_x[i]);
             double loss = mse.get_loss(pred,train_y[i]);
             Matrix grad = mse.get_grad();
+           // grad.print();
+            //Seq.printWeights();
             Seq.backward(grad);
-
-            opt.step();
-            opt.clear_grad();
+            opt->step();
+            //opt->clear_grad();
             std::cout << "epoch : " << epoch << " step : " << i << " loss : " << loss << std::endl;
         }
     }
     
     
-    Seq.forward(test_x).print();
+    //Seq.forward(test_x).print();
     return 0;
 }

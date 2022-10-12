@@ -9,7 +9,7 @@ namespace rcsc {
 class Layer{
 public:
     Layer() {}
-    Layer(std::string name):m_name(name) {}
+    Layer(std::string name):m_name(name) {m_is_activate = false;}
     virtual Matrix forward(Matrix &input) {}
     virtual Matrix backward(Matrix &gradient) {}
     std::vector<Matrix *> get_params();
@@ -17,7 +17,9 @@ public:
     std::vector<Matrix *> get_veloc();
     void clear_grad();
     bool is_activate_layer();
+    void printWeights();
     virtual void print();
+    std::string m_name;
 protected:
     Matrix *weight;
     Matrix *weight_grad;
@@ -25,8 +27,8 @@ protected:
     Matrix *bias_grad;
     Matrix *veloc_weight_grad;
     Matrix *veloc_bias_grad;
-    Matrix input;
-    std::string m_name;
+    Matrix m_input;
+    bool m_is_activate;
 };
 
 class Linear : public Layer{

@@ -1,4 +1,5 @@
 #include "rcsc/optimizer.h"
+#include <iostream>
 namespace rcsc {
 Optimizer::Optimizer() {}
 
@@ -42,6 +43,7 @@ SGD::SGD(std::vector<std::vector<Matrix *>> &params,
          std::string decay_type)
     :m_params(params),
     m_grads(grad),
+    m_velocity(veloc),
     m_learning_rate(learning_rete),
     m_momentum(momentum),
     m_weight_decay(weight_decay),
@@ -56,7 +58,12 @@ void SGD::step()
            Matrix decay = get_decay(*m_grads[i][j]);
            Matrix *v = m_velocity[i][j];
            *v = *m_grads[i][j] + (*v) * m_momentum - decay;
+           m_grads[i][j]->print();
+          // std::cout << "before:" << std::endl;
+          // m_params[i][j]->print();
            *m_params[i][j] = *m_params[i][j] - (*v) * m_learning_rate;
+          // std::cout << "after:" << std::endl;
+          // m_params[i][j]->print();
         }
     }
 }
