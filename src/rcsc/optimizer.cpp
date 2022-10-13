@@ -1,18 +1,8 @@
 #include "rcsc/optimizer.h"
 #include <iostream>
 namespace rcsc {
-Optimizer::Optimizer() {}
 
-Optimizer::Optimizer(std::vector<std::vector<Matrix*>> &params,std::vector<std::vector<Matrix *>> &grad, double learning_rete, double weight_decay,std::string decay_type)
-    :m_params(params),
-     m_grads(grad),
-     m_learning_rate(learning_rete),
-     m_weight_decay(weight_decay),
-     m_decay_type(decay_type) {}
-
-void Optimizer::step() {}
-
-void Optimizer::clear_grad()
+void SGD::clear_grad()
 {
     for(int i = 0; i < m_grads.size(); i++)
     {
@@ -21,17 +11,13 @@ void Optimizer::clear_grad()
     }
 }
 
-Matrix Optimizer::get_decay(Matrix &grad)
+Matrix SGD::get_decay(Matrix &grad)
 {
     if (m_decay_type == "l1")
     {
-        return m_weight_decay;
+        return grad ;
     }
-    else if (m_decay_type == "l2")
-    {
-        return grad * m_weight_decay;
-    }
-    return grad;
+    return grad * m_weight_decay;
 }
 
 SGD::SGD(std::vector<std::vector<Matrix *>> &params,
@@ -46,24 +32,22 @@ SGD::SGD(std::vector<std::vector<Matrix *>> &params,
     m_velocity(veloc),
     m_learning_rate(learning_rete),
     m_momentum(momentum),
-    m_weight_decay(weight_decay),
-    m_decay_type(decay_type) {}
+    m_weight_decay(weight_decay)
+{
+    m_decay_type = decay_type;
+}
 
 void SGD::step()
 {
     for (int i = 0; i < m_velocity.size(); i++)
     {
-        for (int j = 0; j < 1; j++)
+        for (int j = 0; j < 2; j++)
         {
            Matrix decay = get_decay(*m_grads[i][j]);
            Matrix *v = m_velocity[i][j];
-           *v = *m_grads[i][j] + (*v) * m_momentum - decay;
-           m_grads[i][j]->print();
-          // std::cout << "before:" << std::endl;
-          // m_params[i][j]->print();
+           auto &grad = *m_grads[i][j];
+           *v = grad + (*v) * m_momentum - decay;
            *m_params[i][j] = *m_params[i][j] - (*v) * m_learning_rate;
-          // std::cout << "after:" << std::endl;
-          // m_params[i][j]->print();
         }
     }
 }

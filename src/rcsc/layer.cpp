@@ -46,11 +46,6 @@ void Layer::print()
     std::cout << "layer:" << m_name << std::endl;
 }
 
-void Layer::printWeights()
-{
-    weight_grad->print();
-}
-
 Linear::Linear(std::string name, int input_size, int output_size){
     m_name = name;
     weight = new Matrix(input_size, output_size);
@@ -64,20 +59,15 @@ Linear::Linear(std::string name, int input_size, int output_size){
 
 Matrix Linear::forward(Matrix & input){
     m_input = input;
-    //input.print();
     return Matrix::times(input, *weight) + *bias;
 }
 
 Matrix Linear::backward(Matrix &gradient){
     Matrix input_T = m_input.rotate();
-   // input_T.print();
-    //gradient.print();
     Matrix weight_grad_delta = Matrix::times(input_T ,gradient);
-     
     *weight_grad =  *weight_grad + weight_grad_delta;
     *bias_grad = gradient.sum_axis_0() + *bias_grad;
     Matrix weight_T = weight->rotate();
-    //weight_grad->print();
     return Matrix::times(gradient, weight_T);
 }
 
@@ -87,8 +77,9 @@ void Linear::print()
 {
     std::cout << "layer:" << m_name << " ";
     weight->printSize();
-    std::cout << std::endl;
+    std::cout << " ";
     bias->printSize();
+    std::cout << std::endl;
 }
 
 Sigmod::Sigmod(std::string name)

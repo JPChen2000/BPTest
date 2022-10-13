@@ -15,7 +15,6 @@ public:
     int add(Layer *layer);
     Matrix forward(Matrix &input);
     int backward(Matrix &grad);
-    void printWeights();
 public:
     void print();
 };

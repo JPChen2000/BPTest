@@ -17,7 +17,6 @@ public:
     std::vector<Matrix *> get_veloc();
     void clear_grad();
     bool is_activate_layer();
-    void printWeights();
     virtual void print();
     std::string m_name;
 protected:

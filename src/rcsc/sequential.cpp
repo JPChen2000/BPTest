@@ -34,19 +34,6 @@ int Sequential::backward(Matrix &grad)
     return 0;
 }
 
-void Sequential::printWeights()
-{
-    for (auto &layer : graphs)
-    {
-        layer->print();
-        std::cout << "is activate layer" << layer->is_activate_layer() << std::endl;
-        if (!layer->is_activate_layer())
-        {
-            layer->printWeights();
-        }    
-    }
-}
-
 void Sequential::print()
 {
     for (auto &layer : graphs)

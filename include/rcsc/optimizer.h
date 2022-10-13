@@ -5,26 +5,7 @@
 #include "rcsc/layer.h"
 
 namespace rcsc {
-class Optimizer
-{
-public:
-    Optimizer();
-    Optimizer(std::vector<std::vector<Matrix *>> &params,std::vector<std::vector<Matrix *>> &grad, double learning_rete, double weight_decay=0.0,std::string decay_type = "l1");
-
-    void step();
-    void clear_grad();
-
-    Matrix get_decay(Matrix &grad);
-
-protected:
-    std::vector<std::vector<Matrix *>> m_params;
-    std::vector<std::vector<Matrix *>> m_grads;
-    double m_learning_rate;
-    double m_weight_decay;
-    std::string m_decay_type;
-};
-
-class SGD:public Optimizer
+class SGD
 {
 public:
     SGD() {}
@@ -36,14 +17,16 @@ public:
         double weight_decay = 0.1,
         std::string decay_type = "l2");
     void step();
+    void clear_grad();
+    Matrix get_decay(Matrix &grad);
 protected:
     std::vector<std::vector<Matrix *>> m_params;
     std::vector<std::vector<Matrix *>> m_grads;
+    std::vector<std::vector<Matrix *>> m_velocity;
     double m_learning_rate;
     double m_momentum;
     double m_weight_decay;
     std::string m_decay_type;
-    std::vector<std::vector<Matrix *>> m_velocity;
 
 };
 

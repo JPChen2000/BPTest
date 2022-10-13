@@ -36,11 +36,11 @@ public:
     Matrix save_by_zero();
     
     Matrix &operator = (const Matrix & M);
-    Matrix &operator + (const Matrix & M);
-    Matrix &operator - (const Matrix & M);
+    Matrix operator + (const Matrix & M);
+    Matrix operator - (const Matrix & M);
     Matrix &operator += (const Matrix & M);
     Matrix &operator -= (const Matrix & M);
-    Matrix &operator * (const double & l);
+    Matrix operator * (const double & l);
     Matrix &operator < (const double &l);
     Matrix &operator > (const double &l);
 

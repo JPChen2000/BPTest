@@ -131,7 +131,6 @@ Matrix Matrix::zeros_like()
     ret.mat = mat;
     ret.clear();
     return ret;
-   //return *this;
 }
 
 Matrix Matrix::rotate()
@@ -195,28 +194,30 @@ Matrix &Matrix::operator = (const Matrix & M)
     return *this;
 }
 
-Matrix &Matrix::operator + (const Matrix &M)
+Matrix Matrix::operator + (const Matrix &M)
 {
+    Matrix tmp = *this;
     for(size_t i=0;i<mat.size();i++)
     {
         for(size_t j=0;j<mat[0].size();j++)
         {
-            mat[i][j] += M.mat[i][j];
+            tmp.mat[i][j] += M.mat[i][j];
         }
     }
-    return *this;
+    return tmp;
 }
 
-Matrix &Matrix::operator - ( const Matrix &M)
+Matrix Matrix::operator - ( const Matrix &M)
 {
+    Matrix tmp = *this;
     for(size_t i=0;i<mat.size();i++)
     {
         for(size_t j=0;j<mat[0].size();j++)
         {
-            mat[i][j] -= M.mat[i][j];
+            tmp.mat[i][j] -= M.mat[i][j];
         }
     }
-    return *this;
+    return tmp;
 }
 
 Matrix &Matrix::operator+=(const Matrix &M)
@@ -232,16 +233,17 @@ Matrix & Matrix::operator-=(const Matrix &M)
 }
 
 
-Matrix & Matrix::operator*(const double &l)
+Matrix Matrix::operator*(const double &l)
 {
+    Matrix tmp = *this;
     for(size_t i=0;i<mat.size();i++)
     {
         for(size_t j=0;j<mat[0].size();j++)
         {
-            mat[i][j] *= l;
+            tmp.mat[i][j] *= l;
         }
     }
-    return *this;
+    return tmp;
 }
 
 Matrix & Matrix::operator<(const double &l)
